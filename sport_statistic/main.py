@@ -1,7 +1,10 @@
+import gi
+
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-from model import sportsmen
-from main_menu import *
+from sport_statistic_lib.sportsmen_mocker import *
+from main_menu import create_main_menu
 
 
 class MainWindow(Gtk.Window):
@@ -14,8 +17,11 @@ class MainWindow(Gtk.Window):
 
         people_list_store = Gtk.ListStore(str, str, float, int)
 
-        for item in sportsmen:
-            people_list_store.append(list(item))
+        sm = SportsmenMocker()
+        sm.execute()
+
+        for item in sm.sportsmen:
+            people_list_store.append(item.get_tuple())
 
         people_tree_view = Gtk.TreeView(people_list_store)
 
