@@ -1,8 +1,13 @@
 from gi.repository import Gtk
+from sport_statistic.sportsman_form import SportsmanWindow
 
 # UI elements
 menu_bar = Gtk.MenuBar()
 
+
+def on_search_clicked(widget):
+    sportsman_window = SportsmanWindow()
+    sportsman_window.show_all()
 
 def create_main_menu(area):
 
@@ -28,8 +33,10 @@ def create_main_menu(area):
     menu_item_sportsmen.set_submenu(sportsmen_menu)
 
     menu_item_open_sportsmen = Gtk.MenuItem("Открыть данные спортсмена")
+    menu_item_open_sportsmen.connect("activate",  on_search_clicked)
     sportsmen_menu.append(menu_item_open_sportsmen)
 
     menu_bar.append(menu_item_sportsmen)
 
     area.pack_start(menu_bar, False, False, 0)
+
