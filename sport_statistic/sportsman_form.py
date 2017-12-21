@@ -6,7 +6,7 @@ from gi.repository import Gtk
 
 class SportsmanWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Current Sportsman")
+        Gtk.Window.__init__(self, title="Изменить данные спортсмена")
         layout = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(layout)
 
@@ -37,12 +37,6 @@ class SportsmanWindow(Gtk.Window):
         score = Gtk.Entry()
         score_box.pack_end(score, False, False, 0)
 
-        place_box = Gtk.Box()
-        layout.pack_start(place_box, False, False, 0)
-
-        place_label = Gtk.Label("Место в итоге:")
-        place_box.pack_start(place_label, False, False, 0)
-
-        place = Gtk.Entry()
-        place_box.pack_end(place, False, False, 0)
+        save = Gtk.Button("Сохранить")
+        layout.pack_start(save, False, False, 0)
 
