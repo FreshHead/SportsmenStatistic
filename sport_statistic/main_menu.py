@@ -1,4 +1,4 @@
-from gi.repository import Gtk, GObject
+from sport_statistic import Gtk, GObject
 
 class MainMenu(Gtk.MenuBar):
     __gsignals__ = {
@@ -8,10 +8,6 @@ class MainMenu(Gtk.MenuBar):
     }
 
     # UI elements
-    """
-    >>> print('Hello')
-    Hello
-    """
     def __init__(self, area):
         super().__init__()
 
