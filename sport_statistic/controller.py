@@ -7,7 +7,6 @@ class Controller:
         self.model = model
         self.tree_view_window = TreeViewWindow(model.list_store)
         self.entry_window = None
-        self.selected_row_until_update = None
 
         self.tree_view_window.main_menu.connect('insert-sportsman', self.open_insert_form)
         self.tree_view_window.main_menu.connect('update-sportsman', self.open_update_form)
@@ -23,11 +22,11 @@ class Controller:
         self.entry_window.show_for_insert()
 
     def open_update_form(self, widget):
-        model, selected_row = self.tree_view_window.tree_view.get_selection().get_selected()
-        if selected_row is not None:
+        model, self.selected_row = self.tree_view_window.tree_view.get_selection().get_selected()
+        if self.selected_row is not None:
             self.entry_window = EntryWindow()
             self.entry_window.connect('save-updated', self.update_in_list_store)
-            self.entry_window.show_for_update(self.selected_row_until_update)
+            self.entry_window.show_for_update(model[self.selected_row])
 
     def delete_selected_row(self, widget):
         model, selected_row = self.tree_view_window.tree_view.get_selection().get_selected()
@@ -38,5 +37,7 @@ class Controller:
         self.model.append(data)
 
     def update_in_list_store(self, widget):
-        pass
-
+        row = self.entry_window.get_saving_fields()
+        self.model.list_store[self.selected_row][0] = row[0]
+        self.model.list_store[self.selected_row][1] = row[1]
+        self.model.list_store[self.selected_row][2] = float(row[2])

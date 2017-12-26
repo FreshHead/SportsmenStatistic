@@ -83,12 +83,14 @@ class EntryWindow(Gtk.Window):
         return [self.surname.get_text(), self.team_code.get_text(), self.score.get_text()]
 
     def on_insert_clicked(self, widget):
-        if self.is_ready_for_save:
+        if self.is_ready_for_save():
             self.emit('save-inserted')
+            self.close()
 
     def on_update_clicked(self, widget):
         if self.is_ready_for_save():
             self.emit('save-updated')
+            self.close()
 
     def is_ready_for_save(self):
         return self.surname.get_text() != '' and self.team_code.get_text() != '' and self.score.get_text() != ''
