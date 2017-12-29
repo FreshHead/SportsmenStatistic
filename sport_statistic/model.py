@@ -1,7 +1,5 @@
-from operator import itemgetter
-
 from sport_statistic import Gtk
-from sport_statistic_lib.sportsmen_mocker import SportsmenMocker, Sportsman
+from sport_statistic_lib.sportsmen_mocker import SportsmenMocker
 
 
 class Model:
@@ -9,8 +7,11 @@ class Model:
         sm = SportsmenMocker()
         sm.execute()
         self.list_store = Gtk.ListStore(str, str, float, int)
-        for item in sm.sportsmen_list:
-            self.list_store.append(item.get_tuple())
+        self.populate_list_store(sm.sportsmen_list)
+
+    def populate_list_store(self, list_with_data):
+        for item in list_with_data:
+            self.list_store.append([item[0], item[1], float(item[2]), 0])
         self.calculate_place()
 
     def append(self, row):
