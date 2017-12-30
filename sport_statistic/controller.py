@@ -1,6 +1,6 @@
 from sport_statistic import Gtk
+from sport_statistic_lib.utility import file_utility
 from sport_statistic.view import TreeViewWindow, EntryWindow
-from sport_statistic import file_utility
 
 
 class Controller:
@@ -10,6 +10,7 @@ class Controller:
         self.entry_window = None
 
         self.tree_view_window.main_menu.connect('open-file', self.open_file)
+        self.tree_view_window.main_menu.connect('save-file', self.save_file)
         self.tree_view_window.main_menu.connect('insert-sportsman', self.open_insert_form)
         self.tree_view_window.main_menu.connect('update-sportsman', self.open_update_form)
         self.tree_view_window.main_menu.connect('delete-sportsman', self.delete_selected_row)
@@ -50,7 +51,22 @@ class Controller:
                                         Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
         response = file_open_dialog.run()
         if response == Gtk.ResponseType.OK:
-            list_from_file = file_utility.read(file_open_dialog.get_file())
+            list_from_file = file_utility.read(file_open_dialog.get_file().get_path())
             self.model.populate_list_store(list_from_file)
 
         file_open_dialog.destroy()
+
+    def save_file(self, widget):
+        file_save_dialog = Gtk.FileChooserDialog("Открыть файл:", self.tree_view_window, Gtk.FileChooserAction.SAVE,
+                                                 (Gtk.STOCK_SAVE_AS, Gtk.ResponseType.OK,
+                                                  Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
+        response = file_save_dialog.run()
+        if response == Gtk.ResponseType.OK:
+            list_store_iter = self.model.list_store.get_iter_first()
+            rows_for_save = []
+            for i in range(0, len(self.model.list_store)):
+                rows_for_save += [self.model.list_store.get(list_store_iter, 0, 1, 2)]
+                list_store_iter = self.model.list_store.iter_next(list_store_iter)
+            file_utility.write(file_save_dialog.get_file().get_path(), rows_for_save)
+
+        file_save_dialog.destroy()

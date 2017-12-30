@@ -4,6 +4,7 @@ from sport_statistic import Gtk, GObject
 class MainMenu(Gtk.MenuBar):
     __gsignals__ = {
         'open-file': (GObject.SIGNAL_RUN_FIRST, None, ()),
+        'save-file': (GObject.SIGNAL_RUN_FIRST, None, ()),
         'insert-sportsman': (GObject.SIGNAL_RUN_FIRST, None, ()),
         'update-sportsman': (GObject.SIGNAL_RUN_FIRST, None, ()),
         'delete-sportsman': (GObject.SIGNAL_RUN_FIRST, None, ())
@@ -22,6 +23,10 @@ class MainMenu(Gtk.MenuBar):
         menu_item_open = Gtk.MenuItem("Открыть")
         menu_item_open.connect("activate", self.on_open)
         file_menu.append(menu_item_open)
+
+        menu_item_save = Gtk.MenuItem("Сохранить")
+        menu_item_save.connect("activate", self.on_save)
+        file_menu.append(menu_item_save)
 
         menu_item_exit = Gtk.MenuItem("Выход")
         menu_item_exit.connect("activate", Gtk.main_quit)
@@ -62,3 +67,6 @@ class MainMenu(Gtk.MenuBar):
 
     def on_open(self, widget):
         self.emit('open-file')
+
+    def on_save(self, widget):
+        self.emit('save-file')
