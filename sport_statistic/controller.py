@@ -1,10 +1,12 @@
 from sport_statistic import Gtk
-from sport_statistic_lib.utility import file_utility
+from sport_statistic_lib.utility import file_utility, log_utility
 from sport_statistic.view import TreeViewWindow, EntryWindow
 
 
 class Controller:
     def __init__(self, model):
+        self.logger = log_utility.create_logger(level='ERROR', filename='app.log')
+
         self.model = model
         self.tree_view_window = TreeViewWindow(model.list_store)
         self.entry_window = None
@@ -16,7 +18,6 @@ class Controller:
         self.tree_view_window.main_menu.connect('delete-sportsman', self.delete_selected_row)
 
         self.tree_view_window.connect('delete-event', Gtk.main_quit)
-
         self.tree_view_window.show_all()
 
     def open_insert_form(self, widget):
@@ -51,10 +52,23 @@ class Controller:
                                         Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
         response = file_open_dialog.run()
         if response == Gtk.ResponseType.OK:
-            list_from_file = file_utility.read(file_open_dialog.get_file().get_path())
-            self.model.populate_list_store(list_from_file)
+            path_to_file = file_open_dialog.get_file().get_path()
+            list_from_file = file_utility.read(path_to_file)
+            if list_from_file is None:
+                self.logger.error("Файл %s имеет неправильный формат", path_to_file)
+                dialog = Gtk.MessageDialog(type=Gtk.MessageType.ERROR,
+                                           buttons=Gtk.ButtonsType.CANCEL,
+                                           text="Ошибка при открытии файла",
+                                           secondary_text="Не правильный формат файла данных файла: "
+                                                          + file_open_dialog.get_file().get_basename())
+                dialog.run()
+                print("ERROR dialog closed")
+                dialog.destroy()
+            else:
+                self.model.populate_list_store(list_from_file)
+            file_open_dialog.destroy()
 
-        file_open_dialog.destroy()
+
 
     def save_file(self, widget):
         file_save_dialog = Gtk.FileChooserDialog("Открыть файл:", self.tree_view_window, Gtk.FileChooserAction.SAVE,

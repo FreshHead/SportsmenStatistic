@@ -44,7 +44,7 @@ class MainMenu(Gtk.MenuBar):
         menu_item_add_sportsman.connect("activate", self.on_insert)
         sportsmen_menu.append(menu_item_add_sportsman)
 
-        menu_item_open_sportsman = Gtk.MenuItem("Открыть данные спортсмена")
+        menu_item_open_sportsman = Gtk.MenuItem("Изменить данные спортсмена")
         menu_item_open_sportsman.connect("activate", self.on_update)
         sportsmen_menu.append(menu_item_open_sportsman)
 
