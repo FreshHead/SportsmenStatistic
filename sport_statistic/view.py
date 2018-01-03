@@ -48,7 +48,11 @@ class EntryWindow(Gtk.Window):
         score_label = Gtk.Label("Количество баллов:")
         self.score = Gtk.Entry()
 
-        self.save = Gtk.Button()
+        button_box = Gtk.HButtonBox()
+        self.save = Gtk.Button(stock=Gtk.STOCK_OK)
+        self.cancel = Gtk.Button(stock=Gtk.STOCK_CANCEL)
+
+        self.cancel.connect("clicked", self.on_cancel)
 
         surname_box.pack_start(surname_label, False, False, 0)
         surname_box.pack_end(self.surname, False, False, 0)
@@ -59,14 +63,19 @@ class EntryWindow(Gtk.Window):
         score_box.pack_start(score_label, False, False, 0)
         score_box.pack_end(self.score, False, False, 0)
 
+        button_box.pack_start(self.save, False, False, 0)
+        button_box.pack_start(self.cancel, False, False, 0)
+
         layout.pack_start(surname_box, False, False, 0)
         layout.pack_start(team_code_box, False, False, 0)
         layout.pack_start(score_box, False, False, 0)
-        layout.pack_start(self.save, False, False, 0)
+        layout.pack_start(button_box, False, False, 0)
+
+    def on_cancel(self, widget):
+        self.close()
 
     def show_for_insert(self):
         self.set_title('Добавление спортсмена')
-        self.save.set_label('Добавить')
         self.save.connect("clicked", self.on_insert_clicked)
         self.show_all()
 
@@ -75,7 +84,6 @@ class EntryWindow(Gtk.Window):
         self.surname.set_text(row[0])
         self.team_code.set_text(row[1])
         self.score.set_text(str(row[2]))
-        self.save.set_label('Сохранить изменения')
         self.save.connect("clicked", self.on_update_clicked)
         self.show_all()
 
