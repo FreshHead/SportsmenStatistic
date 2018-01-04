@@ -1,11 +1,13 @@
 from sport_statistic import Gtk
+from sport_statistic_lib.common.app_settings import AppSettings
 from sport_statistic_lib.utility import file_utility, log_utility
 from sport_statistic.view import TreeViewWindow, EntryWindow
 
 
 class Controller:
     def __init__(self, model):
-        self.logger = log_utility.create_logger(level='ERROR', filename='app.log')
+        self.settings = AppSettings()
+        self.logger = log_utility.create_logger(level=self.settings.log_level, filename=self.settings.log_filename)
 
         self.model = model
         self.tree_view_window = TreeViewWindow(model.list_store)
@@ -62,7 +64,6 @@ class Controller:
                                            secondary_text="Не правильный формат файла данных файла: "
                                                           + file_open_dialog.get_file().get_basename())
                 dialog.run()
-                print("ERROR dialog closed")
                 dialog.destroy()
             else:
                 self.model.populate_list_store(list_from_file)
