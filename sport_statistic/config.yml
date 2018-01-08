@@ -1,3 +1,5 @@
 logging:
-  filename: 'test.log'
-  level: 'ERROR'
+  filename: 'app.log'
+  level: 'INFO'
+file:
+  type: 'POSITIONAL' # can be POSITIONAL or CSV
