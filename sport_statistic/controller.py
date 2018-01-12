@@ -61,12 +61,14 @@ class Controller:
             try:
                 self.model.populate_list_store(list_from_file)
             except Exception:
-                self.logger.error("Файл %s имеет неправильный формат", path_to_file)
+                self.logger.error("Файл %s имеет неправильный формат. Установленный формат файлов: %s.",
+                                  path_to_file, self.settings.file_type)
                 dialog = Gtk.MessageDialog(type=Gtk.MessageType.ERROR,
                                            buttons=Gtk.ButtonsType.CANCEL,
                                            text="Ошибка при открытии файла",
                                            secondary_text="Неправильный формат файла данных: "
-                                                          + file_open_dialog.get_file().get_basename())
+                                                          + file_open_dialog.get_file().get_basename()
+                                           + "\n Текущий формат: " + self.settings.file_type)
                 dialog.run()
                 dialog.destroy()
         file_open_dialog.destroy()
